@@ -1,0 +1,39 @@
+[:template.main]
+    This is main template
+[:/template]
+
+[:template.smallest]
+    [:set module.email="vikas@wpoets.com" /]
+    [:set env.email="vikas.n@wpoets.com" /]
+    [:set email="vikas.n@gmail.com" /]
+    <p>-------</p>
+    [:get env.email /]
+    <p>-------</p>
+    [:get email /]
+    <p>-------</p>
+    [:get module.email /]
+[:/template]
+
+[:template.get_set_samples]
+
+    [set.array fruits]
+        [item ]1[/item]
+        [item ]3[/item]
+        [item ]2[/item]
+        [item ]4[/item]
+    [/set]
+    <p>First Fruit: [get main="fruits.0" /]</p>
+    <p>Second Fruit: [get main="fruits.1" /]</p>
+
+    [array user]
+        [item name]Jonh[/item]
+        [item role]admin[/item]
+        [item age]30[/item]
+        [item email]jonh@gmail.com[/item]
+    [/array]
+
+    <p>User Name: [get main="user.name" /]</p>
+    <p>User Age: [get main="user.age" /]</p>
+    <p>User Age: [get main="user.role" /]</p>
+
+[:/template]

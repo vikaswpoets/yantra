@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Validation Example</title>
+</head>
+<body>
+<form id="myForm" action="/submit" method="POST">
+    <label for="pan">PAN Number:</label>
+    <input type="text" id="pan" name="pan" validate="pan" required>
+
+    <button type="submit">Submit</button>
+</form>
+
+<script src="path/to/your/yantra.js"></script>
+<script>
+    // Custom validation logic
+    function validatePAN(value) {
+        // Example PAN validation: Indian PAN card format (e.g., ABCDE1234F)
+        const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+        return panPattern.test(value);
+    }
+
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        let isValid = true;
+        const form = event.target;
+
+        // Loop through each field with the custom `validate` attribute
+        form.querySelectorAll('[validate]').forEach(field => {
+            const validateType = field.getAttribute('validate');
+            if (validateType === 'pan') {
+                const value = field.value;
+                if (!validatePAN(value)) {
+                    isValid = false;
+                    field.setCustomValidity('Invalid PAN number');
+                    field.reportValidity();
+                } else {
+                    field.setCustomValidity('');
+                }
+            }
+        });
+
+        if (!isValid) {
+            event.preventDefault(); // Prevent form submission if validation fails
+        }
+    });
+</script>
+</body>
+</html>

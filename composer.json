@@ -1,0 +1,17 @@
+{
+  "autoload": {
+    "psr-4": {
+      "System\\": "System/",
+      "Core\\": "Core/",
+      "Utilities\\": "System/Utilities/",
+      "Config\\": "App/Config/",
+      "Controllers\\": "App/Controllers/",
+      "Modules\\": "App/Modules/"
+    }
+  },
+  "require": {
+    "php": ">=8.0",
+    "ext-pdo": "*",
+    "ext-fileinfo": "*"
+  }
+}

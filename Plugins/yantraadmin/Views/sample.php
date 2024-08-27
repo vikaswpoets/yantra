@@ -1,0 +1,1 @@
+<h2>This is a sample view</h2>

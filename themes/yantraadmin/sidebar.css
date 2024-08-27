@@ -1,0 +1,258 @@
+
+/* Topbar styles */
+.topbar {
+    width: 100%;
+    height: 50px;
+    background-color: #23282d;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    z-index: 999999999;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 150px;
+    min-height: 800px;
+    background-color: #32373c;
+    color: white;
+    box-sizing: border-box;
+    position: relative;
+    top: 50px;
+    bottom: 0;
+    overflow: visible;
+    transition: width 0.3s;
+    scrollbar-width: thin;
+    scrollbar-color: #9b9b9b #2a2d31;
+    z-index: 99999;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+
+/* Custom scrollbar styling */
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #2a2d31;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: #0073aa;
+    border: 2px solid #2a2d31;
+}
+
+
+/* Sidebar menu styles */
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    transition: background-color 0.2s;
+}
+
+.sidebar ul li a:hover {
+    background-color: #0073aa;
+}
+
+.sidebar ul li a .icon {
+    margin-right: 10px;
+    transition: margin-right 0.3s;
+}
+
+.sidebar.collapsed ul li a .icon {
+    margin-right: 0;
+}
+
+.sidebar ul li a .label {
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.sidebar.collapsed ul li a .label {
+    opacity: 0;
+    transform: scale(0);
+}
+
+.sidebar ul li ul.submenu {
+    padding-left: 15px;
+    display: none;
+}
+
+.sidebar ul li.active ul.submenu {
+    display: block;
+}
+
+
+/* Content styles */
+.content {
+    box-sizing: border-box;
+    padding: 80px 50px;
+    width: calc(100% - 150px);
+    background-color: #f1f1f1;
+    overflow-y: auto;
+    transition: margin-left 0.3s, width 0.3s;
+}
+
+.content.collapsed {
+    width: calc(100% - 60px);
+}
+
+.toggle-btn {
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+
+/* Sidebar menu styles */
+.sidebar ul li {
+    position: relative;
+}
+.sidebar.collapsed ul li a .label {
+    display: inline-block;
+    transition: opacity 0.3s, transform 0.3s;
+    width: 100%;
+}
+
+.sidebar ul li ul.submenu{
+    position: relative;
+    background: #414141;
+    padding: 4px;
+    left: 0;
+}
+
+.sidebar.collapsed ul li ul.submenu {
+    padding-left: 15px;
+    display: none;
+    position: relative;
+    left: 60px; /* Align to the right of the collapsed sidebar */
+    top: 0;
+    background-color: #32373c;
+    z-index: 1000;
+    min-width: 190px; /* Ensure it has enough width */
+}
+
+.sidebar.collapsed ul li ul.submenu {
+    position: absolute;
+    left: 60px; /* Adjust based on the collapsed sidebar width */
+}
+
+.sidebar.collapsed ul li.active ul.submenu {
+    display: block;
+}
+
+.sidebar.collapsed ul li a {
+    padding-right: 30px; /* To accommodate the submenu icon */
+}
+
+/* Add an indicator for submenus */
+.sidebar ul li.parent-menu>a::after {
+    content: '▼';
+    position: absolute;
+    right: 10px;
+    font-size: 10px;
+    transition: transform 0.3s;
+}
+
+.sidebar ul li.parent-menu.active>a::after {
+    transform: rotate(-180deg);
+}
+
+/* **/
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px;
+    }
+
+    .sidebar.collapsed {
+        width: 60px;
+    }
+
+    .content {
+        margin-left: 60px;
+        width: calc(100% - 60px);
+    }
+
+    .content.collapsed {
+        margin-left: 150px;
+        width: auto;
+    }
+
+    .topbar .toggle-btn {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .topbar {
+        flex-direction: column;
+        height: 100px;
+        padding: 10px 20px;
+    }
+
+    .sidebar {
+        top: 100px;
+        padding: 20px;
+        position: absolute;
+        display: none;
+        transition: left 0.3s;
+    }
+
+    .sidebar.collapsed {
+        width: 90%;
+        max-width: 180px;
+        display: block;
+        height: max-content;
+        padding-bottom: 140px;
+    }
+    .sidebar.collapsed ul li ul.submenu {
+        position: relative;
+        left: 0;
+        background: #414141;
+    }
+
+    .sidebar.collapsed ul li a .label {
+        opacity: 1;
+        transform: scale(100%);
+    }
+
+    .content {
+        margin-left: 0;
+        padding: 20px 10px;
+        width: 100%;
+    }
+
+    .content.collapsed {
+        margin-left: 0;
+    }
+
+    .toggle-btn {
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: 10px;
+    }
+}
