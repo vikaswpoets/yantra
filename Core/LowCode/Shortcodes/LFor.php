@@ -10,7 +10,9 @@ use Core\LowCode\ShortcodeManager;
 class LFor extends Shortcode implements LoopingStructure
 {
     public static string|null $shortcode_name = "for";
-    private bool $conditionMet = false;
+
+    private int $loopStatus = 1;
+    private bool $conditionMet = true; // Assume true initially for entering the loop
 
     public function __construct()
     {
@@ -20,41 +22,48 @@ class LFor extends Shortcode implements LoopingStructure
     public function parse(string $content, array $config, LowCodeTemplate | LowCodeModule | Shortcode $parent = null, LowCodeTemplate | LowCodeModule | Shortcode  $elderSibling = null): bool|string
     {
         $this->parent = $parent;
-        $this->elderSibling = null;
+        $this->elderSibling = $elderSibling;
 
-        //$this->setRawContent($content); // Set the raw content here
         $attributes = $config['attributes'] ?? [];
-        $condition = $attributes['main'] ?? null;
+        $start = isset($attributes['start']) ? (int) $attributes['start'] : 0;
+        $end = isset($attributes['end']) ? (int) $attributes['end'] : 0;
+        $step = isset($attributes['step']) ? (int) $attributes['step'] : 1;
 
-        $assignment = $attributes['assignment'] ?? null;
-        $increment = $attributes['increment'] ?? null;
-
-        if ($condition === null) {
-            throw new \Exception("Condition not provided in [if] shortcode.");
+        if (!isset($attributes['start']) || !isset($attributes['end'])) {
+            throw new \Exception("Start and end values are required in [for] shortcode.");
         }
-        // Replace variables in the condition
-        $compiled_condition = $this->replaceVariables($condition);
 
-        // Evaluate the condition
-        $this->conditionMet = $this->evaluateCondition($compiled_condition);
+        // Replace variables in the start, end, and step
+        $compiled_start = (int)$this->replaceVariables($start);
+        $compiled_end = (int)$this->replaceVariables($end);
+        $compiled_step = (int)$this->replaceVariables($step);
+
+        // Execute the loop
         $output = "";
-
-        for($x = $assignment;$this->conditionMet;)
-
-        while ($this->conditionMet){
-            $this->loopStatus=1;
+        for ($i = $compiled_start; $i <= $compiled_end; $i += $compiled_step) {
+            $this->loopStatus = 1; // Reset loop status
             $output .= ShortcodeManager::parse($content, $this);
-            if($this->loopStatus == 0)
-                break;
-            elseif($this->loopStatus == 2)
-                continue;
-            // Replace variables in the condition
-            $compiled_condition = $this->replaceVariables($condition);
-            // Evaluate the condition
-            $this->conditionMet = $this->evaluateCondition($compiled_condition);
+
+            if ($this->loopStatus == 0) {
+                break; // Break loop
+            } elseif ($this->loopStatus == 2) {
+                continue; // Continue to next iteration
+            }
         }
+
         return $output;
     }
+
+    public function setLoopStatus(int $status = 1): void
+    {
+        $this->loopStatus = $status;
+    }
+
+    public function getLoopStatus(): int
+    {
+        return $this->loopStatus;
+    }
+
 
     public function setConditionMet(bool $conditionMet): void
     {
@@ -64,16 +73,5 @@ class LFor extends Shortcode implements LoopingStructure
     public function getConditionMet(): bool
     {
         return $this->conditionMet;
-    }
-
-    private int $loopStatus = 1;
-    public function setLoopStatus(int $status=1): void
-    {
-        $this->loopStatus = $status;
-    }
-
-    public function getLoopStatus(): int
-    {
-        return $this->loopStatus;
     }
 }
