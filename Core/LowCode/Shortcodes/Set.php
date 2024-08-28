@@ -75,12 +75,21 @@ class Set extends Shortcode
             default:{
                 if(!empty($attr)){
                     foreach ($attr as $key=>$value){
-                        if($value == null)
+                        if($value == null){
                             $value = $default;
-                        if($key == 'main'){
-                            $value =  $content;
+                            //$value = $this->replaceVariables($value);
+                            $value = $this->evaluateCondition($value);
+                            $this->set($key, $value );
                         }
-                        $this->set($key, ShortcodeManager::parse($value,$parent));
+                        else if($key == 'main'){
+                            $value =  $content;
+                            //$value = $this->replaceVariables($value);
+                            $value = $this->evaluateCondition($value);
+                            $this->set($key, $value );
+                        }
+                        else{
+                            $this->set($key, ShortcodeManager::parse($this->evaluateCondition($value),$parent));
+                        }
                     }
                 }
                 break;

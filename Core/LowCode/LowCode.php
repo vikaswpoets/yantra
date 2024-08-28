@@ -121,11 +121,11 @@ class LowCode
     /**
      * Helper function to set a value in a nested array using a path (keys array).
      *
-     * @param array &$array
      * @param array $keys
      * @param mixed $value
+     * @param array|null $array &$array
      */
-    public static function setByPath(array $keys, mixed $value, array &$array = null): void
+/*    public static function setByPath(array $keys, mixed $value, array &$array = null): void
     {
         if($array ===null)
             $current = &self::$env;
@@ -139,24 +139,112 @@ class LowCode
             $current = &$current[$key];
         }
         $current = $value;
+    }*/
+
+    public static function setByPath(array $keys, mixed $value, array &$array = null): void
+    {
+        // If no array is provided, use the class's $env property
+        if ($array === null) {
+            $current = &self::$env;
+        } else {
+            $current = &$array;
+        }
+
+        foreach ($keys as $key) {
+            // If the key doesn't exist or the current level isn't an array, initialize it as an array
+            if (!isset($current[$key]) || !is_array($current[$key])) {
+                $current[$key] = [];
+            }
+            // Move to the next level in the array, using reference
+            $current = &$current[$key];
+        }
+
+        // Finally, set the value at the last level
+        $current = $value;
+    }
+
+    /**
+     * @param array $keys
+     * @param array|null $array
+     * @return bool
+     */
+    public static function hasByPath(array $keys, array $array = null): bool
+    {
+        // Use the main $env array if no array is provided
+        if ($array === null) {
+            $current = self::$env;
+        } else {
+            $current = $array;
+        }
+
+        foreach ($keys as $key) {
+            // If the key doesn't exist at the current level, return false
+            if (!isset($current[$key])) {
+                return false;
+            }
+
+            // Move to the next level in the array
+            $current = $current[$key];
+        }
+
+        // If all keys were found, return true
+        return true;
+    }
+
+    /**
+     * @param array $keys
+     * @param array|null $array
+     * @return void
+     */
+    public static function removeByPath(array $keys, array &$array = null): void
+    {
+        // Use the main $env array if no array is provided
+        if ($array === null) {
+            $current = &self::$env;
+        } else {
+            $current = &$array;
+        }
+
+        foreach ($keys as $i => $key) {
+            // If it's the last key, remove the value
+            if ($i === count($keys) - 1) {
+                unset($current[$key]);
+                return;
+            }
+
+            // If the key doesn't exist or is not an array, there's nothing to remove
+            if (!isset($current[$key]) || !is_array($current[$key])) {
+                return;
+            }
+
+            // Move to the next level in the array, using reference
+            $current = &$current[$key];
+        }
     }
 
     /**
      * Helper function to get a value from a nested array using a path (keys array).
      *
-     * @param array $array
      * @param array $keys
+     * @param array|null $array $array
      * @return mixed|null
      */
     public static function getByPath(array $keys, array $array = null): mixed
     {
-        if($array === null)
-            $current = self::$env;
-        else
-            $current = $array;
+        // If no array is provided, use the class's $env property
+        $current = $array ?? self::$env;
+
         foreach ($keys as $key) {
-            $current = $current[$key] ?? null;
+            // If the key doesn't exist in the current array level, return null
+            if (!isset($current[$key])) {
+                return null;
+            }
+
+            // Move to the next level in the array
+            $current = $current[$key];
         }
+
+        // Return the found value or null
         return $current;
     }
 

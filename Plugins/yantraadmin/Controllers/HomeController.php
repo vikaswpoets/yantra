@@ -69,6 +69,25 @@ class HomeController extends BaseController
             [/while]
             <hr/>
             [module.sample.get_set_samples /]
+
+            [:switch value="active"]
+                [:case value="active"]
+                User is active.
+                [/case]
+                [:case value="inactive"]
+                User is inactive.
+                [/case]
+                [:default]
+                Status is unknown.
+                [/default]
+            [/switch]
+
+            [:set counter="5" /]
+            [:dowhile condition="{counter} < 5"]
+                <p> Counter : [:get counter /].</p>
+                [:set counter="{counter} + 1" /]
+            [/dowhile]
+
             <?php
             $content = ob_get_clean();
             echo  ShortcodeManager::parse( $content);

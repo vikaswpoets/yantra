@@ -89,6 +89,25 @@ abstract class Shortcode
         return $this->parent->get($key);
     }
 
+    public function hasVariable(string $key): bool
+    {
+        if ($this->parent === null) {
+            $keys = explode('.', $key);
+            return LowCode::hasByPath($keys);
+        }
+        return $this->parent->hasVariable($key);
+    }
+
+    public function removeVariable(string $key): void
+    {
+        if ($this->parent === null) {
+            $keys = explode('.', $key);
+            LowCode::removeByPath($keys);
+        } else {
+            $this->parent->removeVariable($key);
+        }
+    }
+
     protected function replaceVariables(string $condition): string
     {
         return preg_replace_callback('/\{([^\{\}]+)\}/', function ($matches) {
