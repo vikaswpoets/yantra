@@ -22,7 +22,7 @@ class LCase extends Shortcode
 
         // Get the case value from attributes
         $attributes = $config['attributes'] ?? [];
-        $caseValue = $attributes['value'] ?? null;
+        $caseValue = $attributes['main'] ?? null;
 
         if ($caseValue === null) {
             throw new \Exception("Case value not provided.");

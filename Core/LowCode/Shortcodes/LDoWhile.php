@@ -23,7 +23,7 @@ class LDoWhile extends Shortcode implements LoopingStructure
 
         // Get the condition from attributes
         $attributes = $config['attributes'] ?? [];
-        $condition = $attributes['condition'] ?? null;
+        $condition = $attributes['main'] ?? null;
 
         if ($condition === null) {
             throw new \Exception("Condition not provided in [dowhile] shortcode.");

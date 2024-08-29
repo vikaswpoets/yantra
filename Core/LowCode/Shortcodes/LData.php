@@ -31,7 +31,7 @@ class LData extends Shortcode
 
             case 'arraypush':
                 $array = $this->get($attr['array']);
-                $value = $this->replaceVariables($attr['value'] ?? $default);
+                $value = $this->replaceVariables($attr['main'] ?? $default);
                 $array[] = $value;
                 $output = $array;
                 break;
@@ -51,7 +51,7 @@ class LData extends Shortcode
 
             case 'arraysearch':
                 $array = $this->get($attr['array']);
-                $value = $this->replaceVariables($attr['value'] ?? $default);
+                $value = $this->replaceVariables($attr['main'] ?? $default);
                 $output = array_search($value, $array);
                 break;
 

@@ -27,7 +27,7 @@ class LForeach extends Shortcode
         $attributes = $config['attributes'] ?? [];
         $array = $attributes['array'] ?? null;
         $keyVar = $attributes['key'] ?? 'key';
-        $valueVar = $attributes['value'] ?? 'value';
+        $valueVar = $attributes['main'] ?? 'value';
 
         if ($array === null) {
             throw new \Exception("Array not provided in [foreach] shortcode.");

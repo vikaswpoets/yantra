@@ -23,7 +23,7 @@ class LSwitch extends Shortcode
 
         // Get the switch value from attributes
         $attributes = $config['attributes'] ?? [];
-        $this->switchValue = $attributes['value'] ?? null;
+        $this->switchValue = $attributes['main'] ?? null;
 
         if ($this->switchValue === null) {
             throw new \Exception("Switch value not provided.");
